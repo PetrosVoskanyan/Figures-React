@@ -1,20 +1,29 @@
-import { Button } from './Button';
+import { Button } from './button/button';
 
-export const BreadcrumbsBar = ({ pages }) => {
-  return(
+export const BreadcrumbsBar = ({
+  current,
+  pages,
+  disabledCreate,
+  onCreateClick,
+}) => {
+  return (
     <div className="BreadcrumbsBar">
       <Button size="small">
-      {
-        pages.map((item) => (
-          item.active ? item.pageName : ""
-        ))
-      }
+        {
+          pages.map((item, index) => (
+            current === index ? item.pageName : ''
+          ))
+        }
       </Button>
+
       <Button
         size="big"
-        variant="contained">
+        variant="contained"
+        onClick={() => onCreateClick()}
+        disabled={disabledCreate}
+      >
         Create
       </Button>
     </div>
-  )
-}
+  );
+};

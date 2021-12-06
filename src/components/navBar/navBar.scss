@@ -1,0 +1,44 @@
+@import "src/common-variables";
+
+
+.NavBar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  .NavButton {
+    background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    border: none;
+    height: 64px;
+    padding: 0 16px;
+    cursor: pointer;
+
+
+    &.active {
+      border-bottom: 2px solid $green;
+    }
+
+    .text {
+      color: $grey;
+
+      font-family: Roboto, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      letter-spacing: 0.1em;
+
+      &.active {
+        background: -webkit-linear-gradient(rgba(43, 166, 161, 1), rgba(3, 244, 167, 1));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;;;
+      }
+    }
+  }
+}
