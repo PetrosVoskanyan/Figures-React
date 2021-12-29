@@ -6,6 +6,7 @@ export const NavBar = ({ pages, current, onCurrentActiveChange }) => {
       {
         pages.map((item, index) => (
           <button
+            key={index}
             className={`NavButton ${current === index ? 'active' : ''}`}
             onClick={() => onCurrentActiveChange(index)}
           >

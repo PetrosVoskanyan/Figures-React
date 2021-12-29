@@ -7,6 +7,7 @@ export const PointsList = ({ points, onDeleteClick }) => {
       {
         points.map((item, index) => (
           <PointListItem
+            key={item.id}
             point={item}
             onDelete={() => onDeleteClick(index)}
           />

@@ -1,62 +1,82 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Logo } from './logo/logos';
 import { NavBar } from './navBar/navBar';
 import { BreadcrumbsBar } from './breadcrumbsBar';
 import { PointsList } from './pointList/point-list';
 import { PointsCanvas } from './points-canvas';
 import { CreateForm } from './createForm/create-form';
+import { genUid } from './genUid';
 
 const POINTS_STORAGE_KEY = 'points-storage-key';
 
-export class Page extends Component {
-  state = {
-    points: JSON.parse(localStorage.getItem(POINTS_STORAGE_KEY)) || [],
-    pages: [
-      { pageName: 'Points' },
-      { pageName: 'Circles' },
-      { pageName: 'Triangles' },
-      { pageName: 'Rectangles' },
-    ],
-    create: false,
-    currentActive: 0,
-  };
+export const Page = () =>  {
 
-  get activePage() {
-    return this.state.pages[this.state.currentActive];
+  const [points, setPoints] = useState(() => {
+    return  JSON.parse(localStorage.getItem(POINTS_STORAGE_KEY)) || [];
+  })
+
+  const [pages] = useState([
+    { pageName: 'Points' },
+    { pageName: 'Circles' },
+    { pageName: 'Triangles' },
+    { pageName: 'Rectangles' },
+  ]);
+
+  const [create, setCreate] = useState(false);
+  const [currentActive, setCurrentActive] = useState(0);
+
+  const handleOpenForm = () => {
+    setCreate(!create)
   }
 
-  render() {
+  const currentActiveChange = (index) => {
+    setCurrentActive(index);
+  }
+
+  const handleDeletePoint = (index) => {
+    const draftPoints = [...points];
+    draftPoints.splice(index, 1);
+    localStorage.setItem(POINTS_STORAGE_KEY, JSON.stringify(draftPoints));
+    setPoints(draftPoints);
+  }
+
+  const handleSavePoint = (point) => {
+    const draftPoints = [...points, { ...point, id: genUid() }];
+    localStorage.setItem(POINTS_STORAGE_KEY, JSON.stringify(draftPoints));
+    setPoints(draftPoints);
+  }
+
     return (
       <div className="pageContent">
         <div className="header">
           <Logo />
           <NavBar
-            pages={this.state.pages}
-            current={this.state.currentActive}
-            onCurrentActiveChange={(index) => this.currentActiveChange(index)}
+            pages={pages}
+            current={currentActive}
+            onCurrentActiveChange={(index) => currentActiveChange(index)}
           />
         </div>
 
         <BreadcrumbsBar
-          current={this.state.currentActive}
-          pages={this.state.pages}
-          onCreateClick={() => this.handleOpenForm()}
-          disabledCreate={this.state.create}
+          current={currentActive}
+          pages={pages}
+          onCreateClick={() => handleOpenForm()}
+          disabledCreate={create}
         />
 
         <div className="pointsPage">
           <PointsList
-            points={this.state.points}
-            onDeleteClick={(index) => this.handleDeletePoint(index)}
+            points={points}
+            onDeleteClick={(index) => handleDeletePoint(index)}
           />
 
           <div className="PointsCanvas">
             <PointsCanvas />
             {
-              this.state.create && (
+              create && (
                 <CreateForm
-                  onSave={(point) => this.handleSavePoint(point)}
-                  onCreateClick={() => this.handleOpenForm()}
+                  onSave={(point) => handleSavePoint(point)}
+                  onCreateClick={() => handleOpenForm()}
                 />
               )
             }
@@ -64,32 +84,4 @@ export class Page extends Component {
         </div>
       </div>
     );
-  }
-
-  handleOpenForm() {
-    this.setState({
-      create: !this.state.create,
-    });
-  }
-
-  currentActiveChange(index) {
-    this.setState({
-      currentActive: index,
-    });
-  }
-
-  handleDeletePoint(index) {
-    const points = this.state.points;
-    points.splice(index, 1);
-    localStorage.setItem(POINTS_STORAGE_KEY, JSON.stringify(points));
-
-    this.setState({ points });
-  }
-
-  handleSavePoint(point) {
-    const points = [...this.state.points, point];
-    localStorage.setItem(POINTS_STORAGE_KEY, JSON.stringify(points));
-
-    this.setState({ points });
-  }
 }

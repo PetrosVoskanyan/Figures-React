@@ -1,72 +1,71 @@
 import { Input } from '../input/input';
 import { Button } from '../button/button';
 import './create-form.scss';
-import { Component } from 'react';
+import { useState } from 'react';
 
-export class CreateForm extends Component {
+ const DRAFT_POINT_LIST = {
+  x: '',
+  y: '',
+  pointName: '',
+}
 
-  state = {
-    x: '',
-    y: '',
-    pointName: '',
-  };
+export const  CreateForm = ({ onSave, onCreateClick }) => {
 
-  render() {
+   const [draftPoint, setDraftPoint] = useState(DRAFT_POINT_LIST)
+
     const handleClick = () => {
-      this.props.onSave(this.state);
-      this.props.onCreateClick();
+      onSave(draftPoint);
+      onCreateClick();
     };
+
+  const handleChange = (ev) => {
+    const {name, value} = ev.target;
+      setDraftPoint({ ...draftPoint , [name]: value,})
+  };
 
     return (
       <form className="CreateForm">
         <div className="InputContainer">
           <Input
+            value={draftPoint.x}
             name="x"
             type="text"
             label="x axis"
-            autocomplete="off"
-            onChange={this.handleChange}
+            autoComplete="off"
+            onChange={handleChange}
           />
           <Input
+            value={draftPoint.y}
             name="y"
             type="text"
             label="y axis"
-            autocomplete="off"
-            onChange={this.handleChange}
+            autoComplete="off"
+            onChange={handleChange}
           />
           <Input
+            value={draftPoint.pointName}
             name="pointName"
             type="text"
             label="pointName"
-            autocomplete="off"
-            onChange={this.handleChange}
+            autoComplete="off"
+            onChange={handleChange}
           />
         </div>
 
         <div className="ActionContainer">
           <Button
             size="big"
-            onClick={() => this.props.onCreateClick()}
+            onClick={() => onCreateClick()}
           >
             CANCEL</Button>
           <Button
             size="big"
             variant="outlined"
             onClick={() => handleClick()}
-            disabled={!this.state.x || !this.state.y || !this.state.pointName}
+            disabled={!draftPoint.x || !draftPoint.y || !draftPoint.pointName}
           >
             Save</Button>
         </div>
       </form>
     );
-  }
-
-  handleChange = (ev) => {
-    const axis = ev.target.value;
-    const axisName = ev.target.name;
-
-    this.setState({
-      [axisName]: axis,
-    });
-  };
 }
