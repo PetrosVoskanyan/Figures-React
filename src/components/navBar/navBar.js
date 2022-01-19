@@ -1,17 +1,28 @@
-import './navBar.scss';
+import './navBar.module.scss';
+import { NavLink } from 'react-router-dom';
+import * as classes from './navBar.module.scss';
+import clsx from 'clsx';
 
-export const NavBar = ({ pages, current, onCurrentActiveChange }) => {
+export const NavBar = () => {
+
+  const pages = [
+    { pageName: 'Points' },
+    { pageName: 'Circles' },
+    { pageName: 'Triangles' },
+    { pageName: 'Rectangles' },
+  ];
+
   return (
-    <div className="NavBar">
+    <div className={classes.NavBar}>
       {
         pages.map((item, index) => (
-          <button
+          <NavLink
+            to={item.pageName}
             key={index}
-            className={`NavButton ${current === index ? 'active' : ''}`}
-            onClick={() => onCurrentActiveChange(index)}
+            className={({ isActive }) => clsx(classes.NavButton, { [classes.active]: isActive })}
           >
-            <p className={`text ${current === index ? 'active' : ''}`}>{item.pageName}</p>
-          </button>
+            {item.pageName}
+          </NavLink>
         ))
       }
     </div>

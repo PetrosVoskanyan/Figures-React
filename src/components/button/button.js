@@ -1,4 +1,5 @@
-import './button.scss';
+import * as classes from './button.models.scss';
+import PatchStyles from 'patch-styles';
 
 const sizeClassNames = {
   small: 'Small',
@@ -23,12 +24,14 @@ export const Button = ({
   const sizeClassName = sizeClassNames[size] ?? sizeClassNames.normal;
 
   return (
-    <button
-      type="button"
-      className={`Button ${sizeClassName} ${variantClassName}`}
-      {...buttonProps}
-    >
-      {children}
-    </button>
+    <PatchStyles classNames={classes}>
+      <button
+        type="button"
+        className={`Button ${sizeClassName} ${variantClassName}`}
+        {...buttonProps}
+      >
+        {children}
+      </button>
+    </PatchStyles>
   );
 };

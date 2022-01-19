@@ -1,11 +1,14 @@
 import { ReactComponent as LogoSvg } from '../../assets/images/logo.svg';
-import './logos.scss';
+import * as classes from './logos.models.scss';
+import PatchStyles from 'patch-styles';
 
 export const Logo = () => {
   return (
-    <div className="logoContainer">
-      <LogoSvg />
-      <h1 className="siteName">Figures</h1>
-    </div>
+    <PatchStyles classNames={classes}>
+      <div className="logoContainer">
+        <LogoSvg />
+        <h1 className="siteName">Figures</h1>
+      </div>
+    </PatchStyles>
   );
 };

@@ -1,6 +1,10 @@
-export const PointsCanvas = () => {
+import PatchStyles from 'patch-styles';
+import * as classes from '../App.models.scss';
 
+export const PointsCanvas = () => {
   return (
-    <canvas className="canvas" />
+    <PatchStyles classNames={classes}>
+      <canvas className="canvas" />
+    </PatchStyles>
   );
 };
