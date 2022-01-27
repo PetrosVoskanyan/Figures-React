@@ -5,10 +5,19 @@ import { PointsList } from './pointList/point-list';
 import { PageDetailsContainer } from '../../page-details-container/page-details-container';
 import { PointsCanvas } from '../../points-canvas';
 import { Outlet } from 'react-router-dom';
-import * as classes from './points.page.models.scss';
 import PatchStyles from 'patch-styles';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  PageContent: {
+    display: 'flex',
+    padding: [theme.spacing(0), theme.spacing(3)],
+    gap: theme.spacing(2),
+  },
+}));
 
 export const PointsPage = () => {
+  const classes = useStyles();
   const points = useSelector(pointsSlice.selectors.selectAll);
 
 

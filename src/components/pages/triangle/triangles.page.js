@@ -5,10 +5,19 @@ import { Outlet } from 'react-router-dom';
 import { BreadcrumbsBar } from '../../breadcrumbsBar';
 import { triangleSlice } from '../../../store';
 import { TriangleList } from './triangleList/triangle-list';
-import * as classes from './triangles.page.models.scss';
 import PatchStyles from 'patch-styles';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  PageContent: {
+    display: 'flex',
+    padding: [theme.spacing(0), theme.spacing(3)],
+    gap: theme.spacing(2),
+  },
+}));
 
 export const TrianglePage = () => {
+  const classes = useStyles();
   const triangle = useSelector(triangleSlice.selectors.selectAll);
 
   return (
@@ -18,7 +27,7 @@ export const TrianglePage = () => {
       />
 
       <div className="PageContent">
-        <TriangleList points={triangle}/>
+        <TriangleList points={triangle} />
 
         <PageDetailsContainer>
           <PointsCanvas />
@@ -27,5 +36,5 @@ export const TrianglePage = () => {
         </PageDetailsContainer>
       </div>
     </PatchStyles>
-  )
-}
+  );
+};

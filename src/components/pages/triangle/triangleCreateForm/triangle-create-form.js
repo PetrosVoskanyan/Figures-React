@@ -1,18 +1,55 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { triangleSlice, pointsSlice } from '../../../../store';
+import { pointsSlice, triangleSlice } from '../../../../store';
 import { Button } from '../../../button/button';
-import './triangle-create-form.module.scss';
-import { TextField, MenuItem  } from '@mui/material';
-import * as classes from './triangle-create-form.module.scss';
+import { MenuItem, TextField } from '@mui/material';
 import PatchStyles from 'patch-styles';
+import { makeStyles } from '@mui/styles';
 
 const DRAFT_TRIANGLE_LIST = {
   pointIds: [],
 };
 
+const useStyles = makeStyles((theme) => ({
+  CreateForm: {
+    margin: [theme.spacing(2), theme.spacing(0)],
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  InputContainer: {
+    gap: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ActionContainer: {
+    gap: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  'MuiSelect-multiple': {
+    color: '#03f4a7 !important',
+  },
+  'Mui-focused': {
+    color: '#03f4a7 !important',
+  },
+  'MuiOutlinedInput-notchedOutline': {
+    borderColor: '#03f4a7 !important',
+  },
+  'css-hfutr2-MuiSvgIcon-root-MuiSelect-icon': {
+    color: '#03f4a7 !important',
+  },
+}));
+
+
 export const TriangleCreateForm = () => {
+  const classes = useStyles();
   const [draftTriangle, setDraftTriangle] = useState(DRAFT_TRIANGLE_LIST);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,26 +59,26 @@ export const TriangleCreateForm = () => {
     const triangles = {
       points: draftTriangle.pointIds.map((uid) => points.find((point) => point.uid === uid)),
       name: draftTriangle.pointIds.map((uid) => points.find((point) => point.uid === uid).pointName),
-    }
+    };
     dispatch(triangleSlice.actions.createTriangle(triangles));
     navigate('..');
   };
 
   const handleSavePoint = (ev) => {
     const uid = ev.target.value;
-    console.log(uid)
-    setDraftTriangle({ ...draftTriangle, pointIds: ev.target.value});
-    console.log(draftTriangle)
+    console.log(uid);
+    setDraftTriangle({ ...draftTriangle, pointIds: ev.target.value });
+    console.log(draftTriangle);
   };
 
 
   return (
     <PatchStyles classNames={classes}>
-      <form className='CreateForm'>
+      <form className="CreateForm">
         <div className="InputContainer">
           <TextField
             onChange={handleSavePoint}
-            label='Vertex'
+            label="Vertex"
             select
             SelectProps={{
               multiple: true,

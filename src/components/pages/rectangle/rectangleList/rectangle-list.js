@@ -1,10 +1,26 @@
 import { useSelector } from 'react-redux';
 import { rectangleSlice } from '../../../../store';
 import PatchStyles from 'patch-styles';
-import * as classes from './rectangle-list.models.scss';
 import { RectangleListItem } from './rectangleListItem/rectangle-list-item';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  rectangleList: {
+    width: theme.spacing(50),
+    height: theme.spacing(75),
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 0,
+    gap: theme.spacing(2),
+
+    background: '#0a1929ff',
+    borderRadius: theme.spacing(1.2),
+    margin: [theme.spacing(0), theme.spacing(3)],
+  },
+}));
 
 export const RectangleList = () => {
+  const classes = useStyles();
   const rectangles = useSelector(rectangleSlice.selectors.selectAll);
 
   return (

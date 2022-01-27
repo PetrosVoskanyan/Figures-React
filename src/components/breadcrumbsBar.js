@@ -1,9 +1,22 @@
 import { Button } from './button/button';
 import { useNavigate } from 'react-router-dom';
-import * as classes from '../App.models.scss';
 import PatchStyles from 'patch-styles';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  BreadcrumbsBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    padding: 0,
+    margin: theme.spacing(3),
+  },
+}));
 
 export const BreadcrumbsBar = ({ current }) => {
+  const classes = useStyles();
+
   const pages = [
     { pageName: 'Points' },
     { pageName: 'Circles' },
