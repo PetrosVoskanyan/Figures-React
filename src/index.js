@@ -10,7 +10,7 @@ import { GeneralMuiConfig } from './components/main-providers/general-mui-config
 ReactDOM.render(
   <React.StrictMode>
     <GeneralMuiConfig>
-      <BrowserRouter>
+      <BrowserRouter basename="/Figures-React">
         <Provider store={store}>
           <App />
         </Provider>
