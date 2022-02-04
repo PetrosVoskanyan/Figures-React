@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
 import { CircleListItem } from './circle-list-item/circle-list-item';
 import PatchStyles from 'patch-styles';
-import { circleSlice } from '../../../../store';
 import { makeStyles } from '@mui/styles';
+import { useFetchCirclesListQuery } from '../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   circleList: {
@@ -21,13 +20,18 @@ const useStyles = makeStyles((theme) => ({
 
 export const CirclesList = () => {
   const classes = useStyles();
-  const circles = useSelector(circleSlice.selectors.selectAll);
+  const { data: circles } = useFetchCirclesListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
 
   return (
     <PatchStyles classNames={classes}>
       <div className="circleList">
         {
-          circles.map((item) => (
+          circles?.map((item) => (
             <CircleListItem
               key={item.uid}
               circle={item}

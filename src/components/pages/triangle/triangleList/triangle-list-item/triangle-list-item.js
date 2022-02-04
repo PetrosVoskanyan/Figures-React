@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { Avatar } from '../../../points/pointList/Avatar/avatar';
 import { Button } from '../../../../button/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToilet } from '@fortawesome/free-solid-svg-icons';
-import { triangleSlice } from '../../../../../store';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useDeleteTriangleMutation } from '../../../../../store/services';
+import { Avatar } from '../../../points/pointList/Avatar/avatar';
 
 const useStyles = makeStyles((theme) => ({
   coordinationInfo: {
@@ -49,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
 
 export const TriangleListItem = ({ triangle }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const [deleteTriangle] = useDeleteTriangleMutation();
 
   const handleDeleteTask = () => {
-    dispatch(triangleSlice.actions.deleteTriangle(triangle.uid));
+    deleteTriangle(triangle.uid);
   };
 
   return (

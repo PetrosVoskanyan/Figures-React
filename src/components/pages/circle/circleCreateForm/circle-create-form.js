@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { circleSlice, pointsSlice } from '../../../../store';
 import { Input } from '../../../input/input';
 import { Button } from '../../../button/button';
 import { MenuItem, TextField } from '@mui/material';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useCreateCircleMutation, useFetchPointsListQuery } from '../../../../store/services';
+import genUid from 'light-uid';
 
 const DRAFT_CIRCLE_LIST = {
   center: null,
@@ -52,12 +52,18 @@ const useStyles = makeStyles((theme) => ({
 export const CircleCreateForm = () => {
   const classes = useStyles();
   const [draftCircle, setDraftCircle] = useState(DRAFT_CIRCLE_LIST);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const points = useSelector(pointsSlice.selectors.selectAll);
+  const { data: points } = useFetchPointsListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
+  const [createCircle] = useCreateCircleMutation();
+
 
   const handleClick = () => {
-    dispatch(circleSlice.actions.createCircle(draftCircle));
+    createCircle({ ...draftCircle, uid: genUid() });
     navigate('..');
   };
 
@@ -79,7 +85,7 @@ export const CircleCreateForm = () => {
         <div className="InputContainer">
           <TextField className="select" onChange={handleSavePoint} select>
             {
-              points.map((point) => (
+              points?.map((point) => (
                 <MenuItem key={point.uid} value={point.uid}>{point.pointName} ({point.x}, {point.y})</MenuItem>
               ))
             }

@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
 import { Avatar } from '../../../points/pointList/Avatar/avatar';
 import { Button } from '../../../../button/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToilet } from '@fortawesome/free-solid-svg-icons';
-import { rectangleSlice } from '../../../../../store';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useDeleteRectangleMutation } from '../../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   coordinationInfo: {
@@ -49,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
 
 export const RectangleListItem = ({ rectangle }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const [deleteRectangle] = useDeleteRectangleMutation();
 
   const handleDeleteTask = () => {
-    dispatch(rectangleSlice.actions.deleteRectangle(rectangle.uid));
+    deleteRectangle(rectangle.uid);
   };
 
   return (

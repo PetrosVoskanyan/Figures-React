@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
-import { triangleSlice } from '../../../../store';
 import { TriangleListItem } from './triangle-list-item/triangle-list-item';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useFetchTrianglesListQuery } from '../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   triangleList: {
@@ -21,13 +20,19 @@ const useStyles = makeStyles((theme) => ({
 
 export const TriangleList = () => {
   const classes = useStyles();
-  const triangles = useSelector(triangleSlice.selectors.selectAll);
+  const { data: triangles } = useFetchTrianglesListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
+
 
   return (
     <PatchStyles classNames={classes}>
       <div className="triangleList">
         {
-          triangles.map((item) => (
+          triangles?.map((item) => (
             <TriangleListItem
               key={item.uid}
               triangle={item}

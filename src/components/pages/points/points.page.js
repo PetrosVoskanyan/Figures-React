@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux';
-import { pointsSlice } from '../../../store';
 import { BreadcrumbsBar } from '../../breadcrumbsBar';
 import { PointsList } from './pointList/point-list';
 import { PageDetailsContainer } from '../../page-details-container/page-details-container';
@@ -18,8 +16,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const PointsPage = () => {
   const classes = useStyles();
-  const points = useSelector(pointsSlice.selectors.selectAll);
-
 
   return (
     <PatchStyles classNames={classes}>
@@ -28,7 +24,7 @@ export const PointsPage = () => {
       />
 
       <div className="PageContent">
-        <PointsList points={points} />
+        <PointsList />
 
         <PageDetailsContainer>
           <PointsCanvas />

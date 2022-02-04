@@ -1,8 +1,7 @@
 import { PointListItem } from './pointListItem/point-list-item';
-import { useSelector } from 'react-redux';
-import { pointsSlice } from '../../../../store';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useFetchPointsListQuery } from '../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   pointList: {
@@ -21,15 +20,20 @@ const useStyles = makeStyles((theme) => ({
 
 export const PointsList = () => {
   const classes = useStyles();
-  const points = useSelector(pointsSlice.selectors.selectAll);
+  const { data: points } = useFetchPointsListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
 
   return (
     <PatchStyles classNames={classes}>
       <div className="pointList">
         {
-          points.map((item) => (
+          points?.map((item) => (
             <PointListItem
-              key={item.id}
+              key={item.uid}
               point={item}
             />
           ))

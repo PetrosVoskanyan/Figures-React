@@ -1,30 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { pointsSlice } from './slices/points.slice';
-import { circleSlice } from './slices/circle.slice';
-import { triangleSlice } from './slices/triangle.slice';
-import { rectangleSlice } from './slices/rectangle.slice';
-
+import { pointsService } from './services';
+import { circlesService } from './services';
+import { trianglesService } from './services';
+import { rectanglesService } from './services';
 
 export const store = configureStore({
   reducer: {
-    points: pointsSlice.reducer,
-    circles: circleSlice.reducer,
-    triangles: triangleSlice.reducer,
-    rectangles: rectangleSlice.reducer,
+    [pointsService.reducerPath]: pointsService.reducer,
+    [circlesService.reducerPath]: circlesService.reducer,
+    [trianglesService.reducerPath]: trianglesService.reducer,
+    [rectanglesService.reducerPath]: rectanglesService.reducer,
   },
+  middleware: (getDefaultMiddleware) => [
+    ...getDefaultMiddleware(),
+    pointsService.middleware,
+    circlesService.middleware,
+    trianglesService.middleware,
+    rectanglesService.middleware,
+  ],
 });
-
-store.subscribe(() => {
-  const state = store.getState();
-  localStorage.setItem('points-storage-key', JSON.stringify(state.points.allPoints));
-  localStorage.setItem('circles-storage-key', JSON.stringify(state.circles.allCircles));
-  localStorage.setItem('triangle-storage-key', JSON.stringify(state.triangles.allTriangles))
-  localStorage.setItem('rectangle-storage-key', JSON.stringify(state.rectangles.allRectangles))
-});
-
-export {
-  pointsSlice,
-  circleSlice,
-  triangleSlice,
-  rectangleSlice,
-};

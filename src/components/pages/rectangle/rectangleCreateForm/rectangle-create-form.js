@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { pointsSlice, rectangleSlice } from '../../../../store';
 import { Button } from '../../../button/button';
-import { TextField, MenuItem  } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useCreateRectangleMutation, useFetchPointsListQuery } from '../../../../store/services';
 
 const DRAFT_RECTANGLE_LIST = {
   pointIds: [],
@@ -51,32 +50,37 @@ const useStyles = makeStyles((theme) => ({
 export const RectangleCreateForm = () => {
   const classes = useStyles();
   const [draftRectangle, setDraftRectangle] = useState(DRAFT_RECTANGLE_LIST);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const points = useSelector(pointsSlice.selectors.selectAll);
+  const [createRectangle] = useCreateRectangleMutation();
+  const { data: points } = useFetchPointsListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
 
   const handleClick = () => {
     const rectangles = {
       points: draftRectangle.pointIds.map((uid) => points.find((point) => point.uid === uid)),
       name: draftRectangle.pointIds.map((uid) => points.find((point) => point.uid === uid).pointName),
-    }
+    };
 
-    dispatch(rectangleSlice.actions.createRectangle(rectangles));
+    createRectangle(rectangles);
     navigate('..');
   };
 
   const handleSavePoint = (ev) => {
-    setDraftRectangle({ ...draftRectangle, pointIds: ev.target.value});
+    setDraftRectangle({ ...draftRectangle, pointIds: ev.target.value });
   };
 
 
   return (
     <PatchStyles classNames={classes}>
-      <form className='CreateForm'>
+      <form className="CreateForm">
         <div className="InputContainer">
           <TextField
             onChange={handleSavePoint}
-            label='Vertex'
+            label="Vertex"
             select
             SelectProps={{
               multiple: true,
@@ -86,7 +90,7 @@ export const RectangleCreateForm = () => {
             helperText={draftRectangle.pointIds.length !== 4 ? 'Please pick 4 points' : ''}
           >
             {
-              points.map((point) => (
+              points?.map((point) => (
                 <MenuItem key={point.uid} value={point.uid}>{point.pointName} ({point.x}, {point.y})</MenuItem>
               ))
             }

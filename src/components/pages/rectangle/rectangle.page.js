@@ -1,9 +1,7 @@
-import { useSelector } from 'react-redux';
 import { PageDetailsContainer } from '../../page-details-container/page-details-container';
 import { PointsCanvas } from '../../points-canvas';
 import { Outlet } from 'react-router-dom';
 import { BreadcrumbsBar } from '../../breadcrumbsBar';
-import { rectangleSlice } from '../../../store';
 import PatchStyles from 'patch-styles';
 import { RectangleList } from './rectangleList/rectangle-list';
 import { makeStyles } from '@mui/styles';
@@ -18,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const RectanglePage = () => {
   const classes = useStyles();
-  const rectangle = useSelector(rectangleSlice.selectors.selectAll);
 
   return (
     <PatchStyles classNames={classes}>
@@ -27,7 +24,7 @@ export const RectanglePage = () => {
       />
 
       <div className="PageContent">
-        <RectangleList points={rectangle}/>
+        <RectangleList />
 
         <PageDetailsContainer>
           <PointsCanvas />
@@ -36,5 +33,5 @@ export const RectanglePage = () => {
         </PageDetailsContainer>
       </div>
     </PatchStyles>
-  )
-}
+  );
+};

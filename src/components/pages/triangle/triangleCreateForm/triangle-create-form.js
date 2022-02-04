@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { pointsSlice, triangleSlice } from '../../../../store';
 import { Button } from '../../../button/button';
 import { MenuItem, TextField } from '@mui/material';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useCreateTriangleMutation, useFetchPointsListQuery } from '../../../../store/services';
 
 const DRAFT_TRIANGLE_LIST = {
   pointIds: [],
@@ -34,16 +33,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   'MuiSelect-multiple': {
-    color: '#03f4a7 !important',
+    color: '#03f4a7',
   },
   'Mui-focused': {
-    color: '#03f4a7 !important',
+    color: '#03f4a7',
   },
   'MuiOutlinedInput-notchedOutline': {
-    borderColor: '#03f4a7 !important',
+    borderColor: '#03f4a7',
   },
   'css-hfutr2-MuiSvgIcon-root-MuiSelect-icon': {
-    color: '#03f4a7 !important',
+    color: '#03f4a7',
   },
 }));
 
@@ -51,24 +50,27 @@ const useStyles = makeStyles((theme) => ({
 export const TriangleCreateForm = () => {
   const classes = useStyles();
   const [draftTriangle, setDraftTriangle] = useState(DRAFT_TRIANGLE_LIST);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const points = useSelector(pointsSlice.selectors.selectAll);
+  const [createTriangle] = useCreateTriangleMutation();
+  const { data: points } = useFetchPointsListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
 
   const handleClick = () => {
     const triangles = {
       points: draftTriangle.pointIds.map((uid) => points.find((point) => point.uid === uid)),
       name: draftTriangle.pointIds.map((uid) => points.find((point) => point.uid === uid).pointName),
     };
-    dispatch(triangleSlice.actions.createTriangle(triangles));
+    createTriangle(triangles);
     navigate('..');
   };
 
   const handleSavePoint = (ev) => {
     const uid = ev.target.value;
-    console.log(uid);
-    setDraftTriangle({ ...draftTriangle, pointIds: ev.target.value });
-    console.log(draftTriangle);
+    setDraftTriangle({ ...draftTriangle, pointIds: uid });
   };
 
 
@@ -88,7 +90,7 @@ export const TriangleCreateForm = () => {
             helperText={draftTriangle.pointIds.length !== 3 ? 'Please pick 3 points' : ''}
           >
             {
-              points.map((point) => (
+              points?.map((point) => (
                 <MenuItem key={point.uid} value={point.uid}>{point.pointName} ({point.x}, {point.y})</MenuItem>
               ))
             }

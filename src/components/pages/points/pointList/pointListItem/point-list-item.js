@@ -2,10 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToilet } from '@fortawesome/free-solid-svg-icons';
 import { Avatar } from '../Avatar/avatar';
 import { Button } from '../../../../button/button';
-import { useDispatch } from 'react-redux';
-import { pointsSlice } from '../../../../../store';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useDeletePointMutation } from '../../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   coordination: {
@@ -41,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const PointListItem = ({ point }) => {
-  const classes = useStyles()
-  const dispatch = useDispatch();
+  const classes = useStyles();
+  const [deletePoint] = useDeletePointMutation();
 
   const handleDeleteTask = () => {
-    dispatch(pointsSlice.actions.deletePoint(point.uid));
+    deletePoint(point.uid);
   };
 
   return (

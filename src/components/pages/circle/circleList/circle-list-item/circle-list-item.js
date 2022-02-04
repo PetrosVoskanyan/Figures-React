@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
 import { Avatar } from '../../../points/pointList/Avatar/avatar';
 import { Button } from '../../../../button/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToilet } from '@fortawesome/free-solid-svg-icons';
 import PatchStyles from 'patch-styles';
-import { circleSlice } from '../../../../../store';
 import { makeStyles } from '@mui/styles';
+import { useDeleteCircleMutation } from '../../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   coordination: {
@@ -54,10 +53,10 @@ const useStyles = makeStyles((theme) => ({
 
 export const CircleListItem = ({ circle }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const [deleteCircle] = useDeleteCircleMutation();
 
   const handleDeleteTask = () => {
-    dispatch(circleSlice.actions.deleteCircle(circle.uid));
+    deleteCircle(circle.uid);
   };
 
   return (

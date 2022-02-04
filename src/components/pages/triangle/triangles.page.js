@@ -1,9 +1,7 @@
-import { useSelector } from 'react-redux';
 import { PageDetailsContainer } from '../../page-details-container/page-details-container';
 import { PointsCanvas } from '../../points-canvas';
 import { Outlet } from 'react-router-dom';
 import { BreadcrumbsBar } from '../../breadcrumbsBar';
-import { triangleSlice } from '../../../store';
 import { TriangleList } from './triangleList/triangle-list';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
@@ -18,8 +16,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const TrianglePage = () => {
   const classes = useStyles();
-  const triangle = useSelector(triangleSlice.selectors.selectAll);
-
   return (
     <PatchStyles classNames={classes}>
       <BreadcrumbsBar
@@ -27,7 +23,7 @@ export const TrianglePage = () => {
       />
 
       <div className="PageContent">
-        <TriangleList points={triangle} />
+        <TriangleList />
 
         <PageDetailsContainer>
           <PointsCanvas />

@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
-import { rectangleSlice } from '../../../../store';
 import PatchStyles from 'patch-styles';
 import { RectangleListItem } from './rectangleListItem/rectangle-list-item';
 import { makeStyles } from '@mui/styles';
+import { useFetchRectanglesListQuery } from '../../../../store/services';
 
 const useStyles = makeStyles((theme) => ({
   rectangleList: {
@@ -21,13 +20,18 @@ const useStyles = makeStyles((theme) => ({
 
 export const RectangleList = () => {
   const classes = useStyles();
-  const rectangles = useSelector(rectangleSlice.selectors.selectAll);
+  const { data: rectangles } = useFetchRectanglesListQuery(null, {
+    selectFromResult: ({ data, ...otherInfo }) => ({
+      data: data && Object.values(data),
+      ...otherInfo,
+    }),
+  });
 
   return (
     <PatchStyles classNames={classes}>
       <div className="rectangleList">
         {
-          rectangles.map((item) => (
+          rectangles?.map((item) => (
             <RectangleListItem
               key={item.uid}
               rectangle={item}

@@ -1,11 +1,11 @@
 import { Input } from '../../../input/input';
 import { Button } from '../../../button/button';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { pointsSlice } from '../../../../store';
 import { useNavigate } from 'react-router-dom';
 import PatchStyles from 'patch-styles';
 import { makeStyles } from '@mui/styles';
+import { useCreatePointMutation } from '../../../../store/services';
+import genUid from 'light-uid';
 
 const DRAFT_POINT_LIST = {
   x: '',
@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
 export const CreateForm = () => {
   const classes = useStyles();
   const [draftPoint, setDraftPoint] = useState(DRAFT_POINT_LIST);
-  const dispatch = useDispatch();
+  const [createPoint] = useCreatePointMutation();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    dispatch(pointsSlice.actions.createPoint(draftPoint));
+    createPoint({ ...draftPoint, uid: genUid() });
     navigate('..');
   };
 
